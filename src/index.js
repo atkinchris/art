@@ -11,25 +11,29 @@ export default (() => {
   setSeed(hash)
 
   let render
-  let width
-  let height
-  let pixelRatio
+  let scale = 1
 
   const draw = () => {
     context.save()
-    context.scale(pixelRatio, pixelRatio)
-    render(context, width, height)
+    context.scale(scale, scale)
+    render(context)
     context.restore()
   }
 
   const resize = () => {
-    width = window.innerWidth
-    height = window.innerHeight
-    pixelRatio = window.devicePixelRatio
-    canvas.width = ~~(width * pixelRatio)
-    canvas.height = ~~(height * pixelRatio)
+    const width = window.innerWidth
+    const height = window.innerHeight
+    const pixelRatio = window.devicePixelRatio
+
+    // Sketches have an instrinsic width of 1000 units
+    scale = (width / 1000) * devicePixelRatio
+
+    canvas.width = Math.floor(width * pixelRatio)
+    canvas.height = Math.floor(height * pixelRatio)
+
     canvas.style.width = `${width}px`
     canvas.style.height = `${height}px`
+
     if (render) draw()
   }
 
