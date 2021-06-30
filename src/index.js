@@ -6,6 +6,8 @@ export default (() => {
   const context = canvas.getContext('2d')
 
   const hash = window.tokenData || getRandomHash()
+  document.getElementById('hash').innerText = hash
+
   setSeed(hash)
 
   let render
