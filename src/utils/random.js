@@ -57,6 +57,10 @@ const rngBoolean = () => rng() > 0.5
 
 const rngRange = (min, max) => rng() * (max - min) + min
 
+const rngRangeFloor = (min, max) => Math.floor(rngRange(min, max))
+
+const rngArrayItem = array => (array.length ? array[rngRangeFloor(0, array.length)] : undefined)
+
 const getRandomHash = () => {
   let result = '0x'
 
@@ -67,4 +71,4 @@ const getRandomHash = () => {
   return result
 }
 
-export { setSeed, rng, rngBoolean, rngRange, getRandomHash }
+export { setSeed, rng, rngBoolean, rngRange, rngArrayItem, getRandomHash }

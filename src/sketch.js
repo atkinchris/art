@@ -1,28 +1,30 @@
-import { rngRange } from './utils/random.js'
+import { rngArrayItem, rngRange } from './utils/random.js'
+
+const colours = ['red', 'blue', 'yellow']
+
+const createShape = () => {
+  const colour = rngArrayItem(colours)
+  const x = rngRange(-50, 250)
+  const y = rngRange(100, 900)
+  const shapeWidth = rngRange(500, 750)
+  const shapeHeight = rngRange(40, 70)
+
+  const pathParts = [`M${x} ${y}`]
+
+  pathParts.push(`h ${shapeWidth}`)
+  pathParts.push(`v ${shapeHeight}`)
+  pathParts.push(`h ${-shapeWidth}`)
+
+  pathParts.push('Z')
+
+  const path = new Path2D(pathParts.join(' '))
+
+  return { path, colour }
+}
 
 const sketch = () => {
-  const shapes = []
-
-  const createShape = (x, y, w, h, colour) => {
-    const shapeWidth = w * rngRange(0.9, 1.1)
-    const shapeHeight = h * rngRange(0.9, 1.2)
-
-    const pathParts = [`M${x} ${y}`]
-
-    pathParts.push(`h ${shapeWidth}`)
-    pathParts.push(`v ${shapeHeight}`)
-    pathParts.push(`h ${-shapeWidth}`)
-
-    pathParts.push('Z')
-
-    const path = new Path2D(pathParts.join(' '))
-
-    shapes.push({ path, colour })
-  }
-
-  createShape(100, 10, 1000 * 0.8, 1000 / 25, 'red')
-  createShape(100, 60, 1000 * 0.8, 1000 / 25, 'blue')
-  createShape(100, 110, 1000 * 0.8, 1000 / 25, 'yellow')
+  const numberOfShapes = rngRange(10, 15)
+  const shapes = Array.from({ length: numberOfShapes }, createShape)
 
   return (/** @type {CanvasRenderingContext2D} */ context) => {
     context.globalCompositeOperation = 'screen'
