@@ -1,11 +1,12 @@
-import { getRandomHash } from './utils/random.js'
+import { getRandomHash, setSeed } from './utils/random.js'
 import sketch from './sketch.js'
-
-const hash = window.tokenData || getRandomHash()
 
 export default (() => {
   const canvas = document.body.appendChild(document.createElement('canvas'))
   const context = canvas.getContext('2d')
+
+  const hash = window.tokenData || getRandomHash()
+  setSeed(hash)
 
   let render
   let width

@@ -1,8 +1,11 @@
-const rngBetween = (min, max) => Math.random() * (max - min) + min
+import { rngRange } from './utils/random.js'
 
-const sketch =
-  (/** @type {string} */ hash) =>
-  (/** @type {CanvasRenderingContext2D} */ context, /** @type {number} */ width, /** @type {number} */ height) => {
+const sketch = () => {
+  return (
+    /** @type {CanvasRenderingContext2D} */ context,
+    /** @type {number} */ width,
+    /** @type {number} */ height
+  ) => {
     const leftX = Math.floor(width * -0.5)
     const rightX = Math.floor(width * 1.5)
     const topY = Math.floor(height * -0.5)
@@ -16,8 +19,8 @@ const sketch =
     const drawShape = (x, y, w, h, colour) => {
       context.fillStyle = colour
 
-      const shapeWidth = w * rngBetween(0.9, 1.1)
-      const shapeHeight = h * rngBetween(0.9, 1.2)
+      const shapeWidth = w * rngRange(0.9, 1.1)
+      const shapeHeight = h * rngRange(0.9, 1.2)
 
       const path = [`M${x} ${y}`]
 
@@ -34,5 +37,6 @@ const sketch =
     drawShape(100, 60, width * 0.8, height / 25, 'blue')
     drawShape(100, 110, width * 0.8, height / 25, 'yellow')
   }
+}
 
 export default sketch
