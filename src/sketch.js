@@ -4,20 +4,32 @@ const colours = ['red', 'blue', 'yellow']
 
 const createShape = () => {
   const colour = rngArrayItem(colours)
-  const x = rngRange(-50, 250)
-  const y = rngRange(100, 900)
+  let x = rngRange(-50, 250)
+  let y = rngRange(100, 900)
+
+  const startingX = x
+  const startingY = y
   const shapeWidth = rngRange(500, 750)
   const shapeHeight = rngRange(40, 70)
 
-  const pathParts = [`M${x} ${y}`]
+  const path = new Path2D([`M${x} ${y}`])
 
-  pathParts.push(`h ${shapeWidth}`)
-  pathParts.push(`v ${shapeHeight}`)
-  pathParts.push(`h ${-shapeWidth}`)
+  for (x; x < shapeWidth; x += rngRange(0, shapeWidth / 4)) {
+    y += rngRange(-4, 4)
+    path.lineTo(x, y)
+  }
 
-  pathParts.push('Z')
+  for (y; y > startingY; y -= shapeHeight / 6) {
+    x += rngRange(-2, 2)
+    path.lineTo(x, y)
+  }
 
-  const path = new Path2D(pathParts.join(' '))
+  for (x; x > startingX; x -= rngRange(0, shapeWidth / 4)) {
+    y += rngRange(-4, 4)
+    path.lineTo(x, y)
+  }
+
+  path.closePath()
 
   return { path, colour }
 }
