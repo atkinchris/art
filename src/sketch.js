@@ -4,34 +4,39 @@ const colours = ['red', 'blue', 'yellow']
 
 const createShape = () => {
   const colour = rngArrayItem(colours)
-  let x = rngRange(-50, 250)
-  let y = rngRange(100, 900)
 
-  const startingX = x
-  const startingY = y
   const shapeWidth = rngRange(500, 750)
   const shapeHeight = rngRange(40, 70)
 
-  const path = new Path2D([`M${x} ${y}`])
+  const path = new Path2D([`M0 0`])
 
-  for (x; x < shapeWidth; x += rngRange(0, shapeWidth / 4)) {
-    y += rngRange(-4, 4)
-    path.lineTo(x, y)
+  let dX = 0
+  let dY = 0
+  const chaos = rngRange(1, 7)
+
+  for (dX = rngRange(0, 15); dX < shapeWidth; dX += rngRange(0, shapeWidth / 4)) {
+    dY += rngRange(-1 * chaos, 1 * chaos)
+    path.lineTo(dX, dY)
   }
 
-  for (y; y > startingY; y -= shapeHeight / 6) {
-    x += rngRange(-2, 2)
-    path.lineTo(x, y)
+  for (dY; dY < shapeHeight; dY += shapeHeight / 6) {
+    dX += rngRange(-1 * chaos, 1 * chaos)
+    path.lineTo(dX, dY)
   }
 
-  for (x; x > startingX; x -= rngRange(0, shapeWidth / 4)) {
-    y += rngRange(-4, 4)
-    path.lineTo(x, y)
+  for (dX = -rngRange(0, 15); dX > 0; dX -= rngRange(0, shapeWidth / 4)) {
+    dY += rngRange(-1 * chaos, 1 * chaos)
+    path.lineTo(dX, dY)
+  }
+
+  for (dY; dY > 0; dY -= shapeHeight / 6) {
+    dX += rngRange(-1 * chaos, 1 * chaos)
+    path.lineTo(dX, dY)
   }
 
   path.closePath()
 
-  return { path, colour }
+  return { path, colour, x: rngRange(-50, 250), y: rngRange(100, 900) }
 }
 
 const sketch = () => {
@@ -43,8 +48,13 @@ const sketch = () => {
     context.globalAlpha = 0.5
 
     shapes.forEach(shape => {
+      context.save()
+
+      context.translate(shape.x, shape.y)
       context.fillStyle = shape.colour
       context.fill(shape.path)
+
+      context.restore()
     })
   }
 }
