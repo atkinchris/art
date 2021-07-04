@@ -16,22 +16,22 @@ const createShape = () => {
 
   for (dX = rngRange(0, 15); dX < shapeWidth; dX += rngRange(0, shapeWidth / 4)) {
     dY += rngRange(-1 * chaos, 1 * chaos)
-    path.lineTo(dX, dY)
+    path.bezierCurveTo(dX, dY, dX, dY, dX, dY)
   }
 
   for (dY; dY < shapeHeight; dY += shapeHeight / 6) {
     dX += rngRange(-1 * chaos, 1 * chaos)
-    path.lineTo(dX, dY)
+    path.bezierCurveTo(dX, dY, dX, dY, dX, dY)
   }
 
   for (dX = -rngRange(0, 15); dX > 0; dX -= rngRange(0, shapeWidth / 4)) {
     dY += rngRange(-1 * chaos, 1 * chaos)
-    path.lineTo(dX, dY)
+    path.bezierCurveTo(dX, dY, dX, dY, dX, dY)
   }
 
   for (dY; dY > 0; dY -= shapeHeight / 6) {
     dX += rngRange(-1 * chaos, 1 * chaos)
-    path.lineTo(dX, dY)
+    path.bezierCurveTo(dX, dY, dX, dY, dX, dY)
   }
 
   path.closePath()
