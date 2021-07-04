@@ -36,7 +36,10 @@ const createShape = () => {
 
   path.closePath()
 
-  return { path, colour, x: rngRange(-50, 250), y: rngRange(100, 900) }
+  const x = rngRange(-50, 250)
+  const y = rngRange(100, 900) - shapeHeight
+
+  return { path, colour, x, y }
 }
 
 const sketch = () => {
