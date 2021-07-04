@@ -6,6 +6,7 @@
   "license": "ISC",
   "repository": "github:atkinchris/art",
   "scripts": {
+    "start": "http-server src",
     "lint": "eslint \"src/**/*.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,6 +16,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-prettier": "^3.4.0",
+    "http-server": "^0.12.3",
     "prettier": "^2.3.2"
   }
 }
