@@ -71,4 +71,4 @@ const getRandomHash = () => {
   return result
 }
 
-export { setSeed, rng, rngBoolean, rngRange, rngArrayItem, getRandomHash }
+export { xmur3, setSeed, rng, rngBoolean, rngRange, rngArrayItem, getRandomHash }
