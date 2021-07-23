@@ -79,14 +79,13 @@ const getNoise = (x, y, z = 0) => {
   // We need to now find which Schläfli orthoscheme simplex the point lies in.
   // It could be one of six simplices (below). Each represents a traversal order from the origin,
   // visiting each point in the simplex, and ending at a common end.
-  // Note: their common origins (0,0,0) and end points (1,1,1) have been excluded for terseness.
   const simplices = {
-    XYZ: [1, 0, 0, 1, 1, 0],
-    XZY: [1, 0, 0, 1, 0, 1],
-    YXZ: [0, 1, 0, 1, 1, 0],
-    YZX: [0, 1, 0, 0, 1, 1],
-    ZXY: [0, 0, 1, 1, 0, 1],
-    ZYX: [0, 0, 1, 0, 1, 1],
+    XYZ: [0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1],
+    XZY: [0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1],
+    YXZ: [0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1],
+    YZX: [0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1],
+    ZXY: [0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1],
+    ZYX: [0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1],
   }
   // The traversal order is determined by the relative magnitude order of the cell coordinates.
   const traversalOrder = [
@@ -101,18 +100,21 @@ const getNoise = (x, y, z = 0) => {
   // Select the coresponding simplex by it's traversal order.
   const simplex = simplices[traversalOrder]
 
-  // Unskew the surrounding vertices for the simplex, then translate them against the (x, y, z) origin.
+  // Break the simplex 1D array down into it's four vertices.
   const vertices = [
-    // Our vertices all start from (0,0,0)...
-    unskew(0, 0, 0),
-    unskew(simplex[0], simplex[1], simplex[2]),
-    unskew(simplex[3], simplex[4], simplex[5]),
-    // ...and they all end at (1,1,1)
-    unskew(1, 1, 1),
-  ].map(([vX, vY, vZ]) => [u - vX, v - vY, w - vZ])
+    [simplex[0], simplex[1], simplex[2]],
+    [simplex[3], simplex[4], simplex[5]],
+    [simplex[6], simplex[7], simplex[8]],
+    [simplex[9], simplex[10], simplex[11]],
+  ]
 
   // From each of the vertices, we need to calcuate it's contributions to the final noise value.
-  const vertexNoises = vertices.map(([vX, vY, vZ]) => {
+  const vertexNoises = vertices.map(([vI, vJ, vK]) => {
+    // Unskew the surrounding vertices for the simplex, then translate them against the (x, y, z) origin.
+    const [vU, vV, vW] = unskew(vI, vJ, vK)
+    // Translate these against the (x, y, z) origin
+    const [vX, vY, vZ] = [u - vU, v - vV, w - vW]
+
     // Calculate t for this vertex. This equation is given in the original paper, without explanation.
     const t = 0.6 - (vX ** 2 + vY ** 2 + vZ ** 2)
 
@@ -124,6 +126,7 @@ const getNoise = (x, y, z = 0) => {
 
     return t ** 4 * gradient.dot3(vX, vY, vZ)
   })
+
   // We then sum the noise value for each of the vertices together.
   const noiseSum = vertexNoises.reduce((a, b) => a + b)
 
