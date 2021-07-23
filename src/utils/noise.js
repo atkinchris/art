@@ -124,8 +124,8 @@ const createNoiseGenerator = () => {
       // If t is less than zero, we return 0 and move on.
       if (t < 0) return 0
 
-      // Hash the coordinates of the vertex and origin, then modulate by the length of the gradients array,
-      // to find a deterministically random index of a gradient.
+      // Hash the coordinates of the vertex combined with the origin coordinates.
+      // This is a pseudo-random action, that returns a number within the index space of the gradients array.
       const gradientIndex = hash(i + vI + hash(j + vJ + hash(k + vK)))
       const gradient = gradients[gradientIndex]
 
