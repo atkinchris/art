@@ -21,7 +21,7 @@ const sketch = () => {
       context.translate(marker.x, marker.y)
       context.fillStyle = 'black'
 
-      const size = marker.value * 0.1
+      const size = ((marker.value + 1) / 2) * 5
 
       context.beginPath()
       context.arc(size, size, size, 0, Math.PI * 2, true)
