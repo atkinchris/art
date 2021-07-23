@@ -127,8 +127,8 @@ const getNoise = (x, y, z = 0) => {
   // We then sum the noise value for each of the vertices together.
   const noiseSum = vertexNoises.reduce((a, b) => a + b)
 
-  // Return the sum of the noise, scaled into the positive range.
-  return 32 + noiseSum
+  // Return the sum of the noise, scaled into the range [-1, 1].
+  return 32 * noiseSum
 }
 
 // eslint-disable-next-line import/prefer-default-export
