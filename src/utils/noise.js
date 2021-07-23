@@ -11,8 +11,6 @@
 // https://gamedev.stackexchange.com/questions/65653/using-a-permutation-table-for-simplex-noise-without-storing-it
 // https://stackoverflow.com/questions/18801877/why-do-all-simplex-noise-algorithms-have-a-permutation-gradient-table
 
-import { xmur3 } from './random.js'
-
 // Basic 3D gradient object, to do dot operations
 class Gradient {
   constructor(x, y, z) {
@@ -46,6 +44,20 @@ const gradients = [
   new Gradient(0, 1, -1),
   new Gradient(0, -1, -1),
 ]
+
+// Thomas Wang's 32-bit integer hash
+// http://burtleburtle.net/bob/hash/integer.html
+// http://www.cris.com/~Ttwang/tech/inthash.htm
+// This is used in lieu of a predefined permutations table
+const hash = input => {
+  let output = input
+  output = output ^ 61 ^ (output >> 16)
+  output += output << 3
+  output ^= output >> 4
+  output *= 0x27d4eb2d
+  output ^= output >> 15
+  return output
+}
 
 const getNoise = (x, y, z = 0) => {
   // We need a skew factor that fits the equation: (Math.sqrt(n + 1) - 1) / n
@@ -121,9 +133,13 @@ const getNoise = (x, y, z = 0) => {
     // If t is less than zero, we return 0 and move on.
     if (t < 0) return 0
 
-    const gradientIndex = xmur3(vX + vY + vZ)() % gradients.length
+    // Hash the coordinates of the vertex and origin, then modulate by the length of the gradients array,
+    // to find a deterministically random index of a gradient.
+    const gradientIndex = hash(i + vI + hash(j + vJ + hash(k + vK))) % gradients.length
     const gradient = gradients[gradientIndex]
 
+    // Multiply the dot product of the gradient and the vertex's (x, y, z) coordinates, by a seemingly arbitrary
+    // power of t. This power is from the original algorithm.
     return t ** 4 * gradient.dot3(vX, vY, vZ)
   })
 
