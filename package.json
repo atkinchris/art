@@ -5,6 +5,7 @@
   "author": "Chris Atkin <atkinchris@gmail.com>",
   "license": "ISC",
   "repository": "github:atkinchris/art",
+  "type": "module",
   "scripts": {
     "start": "http-server src",
     "lint": "eslint \"src/**/*.js\"",
