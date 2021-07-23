@@ -77,15 +77,16 @@ const getNoise = (x, y, z = 0) => {
   const w = z - z1
 
   // We need to now find which Schläfli orthoscheme simplex the point lies in.
-  // It could be one of six simplices (below). Each represents a traversal order,
-  // starting at the origin and ending at the last point.
+  // It could be one of six simplices (below). Each represents a traversal order from the origin,
+  // visiting each point in the simplex, and ending at a common end.
+  // Note: their common origins (0,0,0) and end points (1,1,1) have been excluded for terseness.
   const simplices = {
-    XYZ: [0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1],
-    XZY: [0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1],
-    YXZ: [0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1],
-    YZX: [0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1],
-    ZXY: [0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1],
-    ZYX: [0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1],
+    XYZ: [1, 0, 0, 1, 1, 0],
+    XZY: [1, 0, 0, 1, 0, 1],
+    YXZ: [0, 1, 0, 1, 1, 0],
+    YZX: [0, 1, 0, 0, 1, 1],
+    ZXY: [0, 0, 1, 1, 0, 1],
+    ZYX: [0, 0, 1, 0, 1, 1],
   }
   // The traversal order is determined by the relative magnitude order of the cell coordinates.
   const traversalOrder = [
@@ -99,13 +100,16 @@ const getNoise = (x, y, z = 0) => {
 
   // Select the coresponding simplex by it's traversal order.
   const simplex = simplices[traversalOrder]
-  // Calculate the surrounding vertices for the simplex, in (x, y, z) space.
+
+  // Unskew the surrounding vertices for the simplex, then translate them against the (x, y, z) origin.
   const vertices = [
+    // Our vertices all start from (0,0,0)...
+    unskew(0, 0, 0),
     unskew(simplex[0], simplex[1], simplex[2]),
     unskew(simplex[3], simplex[4], simplex[5]),
-    unskew(simplex[6], simplex[7], simplex[8]),
-    unskew(simplex[9], simplex[10], simplex[11]),
-  ]
+    // ...and they all end at (1,1,1)
+    unskew(1, 1, 1),
+  ].map(([vX, vY, vZ]) => [u - vX, v - vY, w - vZ])
 
   // From each of the vertices, we need to calcuate it's contributions to the final noise value.
   const vertexNoises = vertices.map(([vX, vY, vZ]) => {
