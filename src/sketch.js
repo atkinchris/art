@@ -5,7 +5,7 @@ const sketch = () => {
 
   for (let y = 0; y < 1000; y += 10) {
     for (let x = 0; x < 1000; x += 10) {
-      markers.push({ x, y, value: getNoise2D(x, y) })
+      markers.push({ x, y, value: getNoise2D(x * 0.007, y * 0.007) })
     }
   }
 
@@ -19,7 +19,7 @@ const sketch = () => {
       context.translate(marker.x, marker.y)
       context.fillStyle = 'black'
 
-      const size = marker.value * 0.25
+      const size = marker.value * 0.1
 
       context.beginPath()
       context.arc(size, size, size, 0, Math.PI * 2, true)

@@ -119,7 +119,7 @@ const getNoise = (x, y, z = 0) => {
     // If t is less than zero, we return 0 and move on.
     if (t < 0) return 0
 
-    const gradientIndex = xmur3(vX + vY + vZ)() % (gradients.length - 2)
+    const gradientIndex = xmur3(vX + vY + vZ)() % gradients.length
     const gradient = gradients[gradientIndex]
 
     return (t ^ 4) * gradient.dot3(vX, vY, vZ)
