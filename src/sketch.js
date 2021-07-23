@@ -1,13 +1,14 @@
-import { getNoise2D } from './utils/noise.js'
+import createNoiseGenerator from './utils/noise.js'
 
 const sketch = () => {
   const markers = []
+  const noise = createNoiseGenerator()
 
-  const step = 5
+  const size = 10
 
-  for (let y = 0; y < 1000; y += step) {
-    for (let x = 0; x < 1000; x += step) {
-      markers.push({ x, y, value: getNoise2D(x * 0.007, y * 0.007, 0) })
+  for (let y = 0; y < 1000; y += size) {
+    for (let x = 0; x < 1000; x += size) {
+      markers.push({ x, y, value: noise(x * 0.007, y * 0.007, 0) })
     }
   }
 
