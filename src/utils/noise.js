@@ -122,7 +122,7 @@ const getNoise = (x, y, z = 0) => {
     const gradientIndex = xmur3(vX + vY + vZ)() % gradients.length
     const gradient = gradients[gradientIndex]
 
-    return (t ^ 4) * gradient.dot3(vX, vY, vZ)
+    return t ** 4 * gradient.dot3(vX, vY, vZ)
   })
   // We then sum the noise value for each of the vertices together.
   const noiseSum = vertexNoises.reduce((a, b) => a + b)
