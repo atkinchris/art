@@ -114,7 +114,7 @@ const getNoise = (x, y, z = 0) => {
   // From each of the vertices, we need to calcuate it's contributions to the final noise value.
   const vertexNoises = vertices.map(([vX, vY, vZ]) => {
     // Calculate t for this vertex. This equation is given in the original paper, without explanation.
-    const t = 0.6 - ((vX ^ 2) - (vY ^ 2) - (vZ ^ 2))
+    const t = 0.6 - (vX ** 2 + vY ** 2 + vZ ** 2)
 
     // If t is less than zero, we return 0 and move on.
     if (t < 0) return 0
