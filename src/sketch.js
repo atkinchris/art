@@ -20,13 +20,13 @@ const sketch = () => {
       context.save()
 
       context.translate(marker.x, marker.y)
-      context.fillStyle = 'black'
 
-      const size = ((marker.value + 1) / 2) * 5
+      const colour = ((marker.value + 1) / 2) * 360
+
+      context.fillStyle = `hsl(${colour}, 100%, 50%)`
 
       context.beginPath()
-      context.arc(size, size, size, 0, Math.PI * 2, true)
-      context.fill()
+      context.fillRect(0, 0, size, size)
 
       context.restore()
     })
