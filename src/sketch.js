@@ -2,6 +2,7 @@ import { rngRangeFloor } from './utils/random.js'
 import calculateHull from './utils/hull.js'
 
 const sketch = () => {
+  const path = new Path2D()
   const hull = calculateHull(
     Array.from({ length: 50 }, () => ({
       x: rngRangeFloor(0, 400),
@@ -9,22 +10,23 @@ const sketch = () => {
     }))
   )
 
+  hull.forEach(point => {
+    path.lineTo(point.x, point.y)
+  })
+
+  path.closePath()
+
   return (/** @type {CanvasRenderingContext2D} */ context) => {
     context.globalCompositeOperation = 'screen'
     context.globalAlpha = 0.5
+    context.fillStyle = 'black'
 
-    hull.forEach(point => {
-      context.save()
+    context.save()
 
-      context.translate(point.x + 300, point.y + 300)
+    context.translate(300, 300)
+    context.stroke(path)
 
-      context.fillStyle = 'black'
-
-      context.beginPath()
-      context.fillRect(0, 0, 4, 4)
-
-      context.restore()
-    })
+    context.restore()
   }
 }
 
