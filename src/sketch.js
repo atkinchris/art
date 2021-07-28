@@ -1,5 +1,6 @@
 import { rngRangeFloor } from './utils/random.js'
 import calculateHull from './utils/hull.js'
+import calculateBezierSmoothPath from './utils/interpolation.js'
 
 const sketch = () => {
   const path = new Path2D()
@@ -10,8 +11,10 @@ const sketch = () => {
     }))
   )
 
-  hull.forEach(point => {
-    path.lineTo(point.x, point.y)
+  const bezierPoints = calculateBezierSmoothPath(hull)
+
+  bezierPoints.forEach(([cp1, cp2, point]) => {
+    path.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, point.x, point.y)
   })
 
   path.closePath()
