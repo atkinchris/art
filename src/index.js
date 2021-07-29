@@ -1,6 +1,28 @@
 import { getRandomHash, setSeed } from './utils/random.js'
 import sketch from './sketch.js'
 
+// Sketches have an instrinsic width of 1000 units.
+const SKETCH_SIZE = 1000
+// Download them at double scale (2000px).
+const DOWNLOAD_SCALE = 2
+
+const createDownloadFunction = (render, hash) => () => {
+  const exportCanvas = document.createElement('canvas')
+  exportCanvas.width = SKETCH_SIZE * DOWNLOAD_SCALE
+  exportCanvas.height = SKETCH_SIZE * DOWNLOAD_SCALE
+
+  const exportContext = exportCanvas.getContext('2d')
+  exportContext.scale(DOWNLOAD_SCALE, DOWNLOAD_SCALE)
+
+  render(exportContext)
+
+  const link = document.createElement('a')
+  link.download = `${hash}.png`
+  link.href = exportCanvas.toDataURL()
+  link.click()
+  link.delete()
+}
+
 export default (() => {
   const canvas = document.body.appendChild(document.createElement('canvas'))
   const context = canvas.getContext('2d')
@@ -25,8 +47,7 @@ export default (() => {
     const height = window.innerHeight
     const pixelRatio = window.devicePixelRatio
 
-    // Sketches have an instrinsic width of 1000 units
-    scale = (width / 1000) * devicePixelRatio
+    scale = (width / SKETCH_SIZE) * devicePixelRatio
 
     canvas.width = Math.floor(width * pixelRatio)
     canvas.height = Math.floor(height * pixelRatio)
@@ -41,4 +62,7 @@ export default (() => {
   resize()
   render = sketch(hash)
   draw()
+
+  const downloadButton = document.getElementById('download')
+  downloadButton.addEventListener('click', createDownloadFunction(render, hash))
 })()
