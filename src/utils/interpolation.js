@@ -15,7 +15,7 @@ const getWrappedAtIndex = (array, index) => array[((index % array.length) + arra
 
 const controlPoint = (current, previous = current, next = current, reverse = false) => {
   // The smoothing ratio
-  const smoothing = 0.2
+  const smoothing = 0.05
   // Properties of the opposed-line
   const line = lineProperties(previous, next)
 
