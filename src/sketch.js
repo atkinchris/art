@@ -66,11 +66,14 @@ const sketch = () => {
 
   return (/** @type {CanvasRenderingContext2D} */ context) => {
     context.globalCompositeOperation = 'darken'
-    context.globalAlpha = 0.95
+
+    context.fillStyle = 'hsl(0, 0%, 98%)'
+    context.fillRect(0, 0, 1000, 1000)
 
     shapes.forEach(shape => {
       context.save()
 
+      context.globalAlpha = 0.95
       context.fillStyle = shape.colour
       context.translate(shape.x + xOffset, shape.y + yOffset)
       context.fill(shape.path)
