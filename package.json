@@ -7,7 +7,7 @@
   "repository": "github:atkinchris/art",
   "type": "module",
   "scripts": {
-    "start": "http-server src",
+    "start": "http-server",
     "lint": "eslint \"src/**/*.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
