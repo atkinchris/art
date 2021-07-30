@@ -3,8 +3,8 @@ import calculateHull from './utils/hull.js'
 import calculateBezierSmoothPath from './utils/interpolation.js'
 
 const createShape = () => {
-  const width = rngRangeFloor(500, 700)
-  const height = rngRangeFloor(45, 55)
+  const width = rngRangeFloor(650, 750)
+  const height = rngRangeFloor(55, 65)
   const numberOfPoints = rngRangeFloor(30, 60)
 
   const path = new Path2D()
@@ -24,20 +24,20 @@ const createShape = () => {
   path.closePath()
 
   return {
-    x: rngRangeFloor(0, 300),
+    x: rngRangeFloor(0, 175),
     y: 0,
     path,
   }
 }
 
 const createShapes = (numberOfShapes, spacingFactor, colourFn) => {
-  const spacingMax = (800 * spacingFactor) / numberOfShapes
+  const spacingMax = (1000 * spacingFactor) / numberOfShapes
 
   return Array.from({ length: numberOfShapes }).reduce(out => {
     const shape = createShape()
-    const { y: previousY = 0 } = out[out.length - 1] || {}
+    const { y: previousY = -spacingMax / 2 } = out[out.length - 1] || {}
 
-    shape.rotation = rngRangeFloor(-2, 2)
+    shape.rotation = rngRangeFloor(-5, 5)
     shape.y += previousY + rngRangeFloor(10, spacingMax)
     shape.colour = colourFn(shape)
 
