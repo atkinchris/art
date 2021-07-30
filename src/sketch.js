@@ -37,6 +37,7 @@ const createShapes = (numberOfShapes, spacingFactor, colourFn) => {
     const shape = createShape()
     const { y: previousY = 0 } = out[out.length - 1] || {}
 
+    shape.rotation = rngRangeFloor(-2, 2)
     shape.y += previousY + rngRangeFloor(10, spacingMax)
     shape.colour = colourFn(shape)
 
@@ -80,6 +81,7 @@ const sketch = () => {
       context.globalAlpha = 0.95
       context.fillStyle = shape.colour
       context.translate(shape.x + xOffset, shape.y + yOffset)
+      context.rotate((shape.rotation * Math.PI) / 180)
       context.fill(shape.path)
 
       context.restore()
