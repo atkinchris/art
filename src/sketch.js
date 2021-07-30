@@ -50,15 +50,20 @@ const createShapes = (numberOfShapes, spacingFactor, colourFn) => {
 const sketch = () => {
   const spacingFactor = 1.3
   const numberOfShapes = rngRangeFloor(20, 30)
-  const dullColours = Array.from({ length: 4 }, () => `hsl(${rngRangeFloor(0, 360)},10%,90%)`)
-  const brightColours = ['#EF4F4F', '#EE9595', '#FFCDA3', '#74C7B8']
-  // const brightColours = Array.from({ length: 4 }, (_, index) => `hsla(${Math.floor(360 / 6) * index},100%,50%,0.5)`)
+  const dullColours = Array.from({ length: 4 }, () => `hsla(${rngRangeFloor(0, 180)},10%,90%,0.5)`)
+
+  const numberOfColours = 8
+  const startingColour = rngRangeFloor(0, 360)
+  const brightColours = Array.from(
+    { length: numberOfColours },
+    (_, index) => `hsla(${(startingColour + Math.floor(225 / numberOfColours) * index) % 360},100%,50%,0.5)`
+  ).reverse()
 
   const shapes = [
     ...createShapes(numberOfShapes / 3, spacingFactor, () => rngArrayItem(dullColours)),
     ...createShapes(numberOfShapes, spacingFactor, ({ y }) => {
       const positionalIndex = Math.round((y / 1000) * brightColours.length)
-      const index = rngRangeFloor(0, 100) > 95 ? rngRangeFloor(0, brightColours.length) : positionalIndex
+      const index = rngRangeFloor(0, 100) > 85 ? rngRangeFloor(0, brightColours.length) : positionalIndex
 
       return brightColours[index]
     }),
