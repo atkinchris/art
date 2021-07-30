@@ -70,14 +70,13 @@ const sketch = () => {
   const xOffset = (1000 - widthOfShapes) / 2
 
   return (/** @type {CanvasRenderingContext2D} */ context) => {
-    context.globalCompositeOperation = 'darken'
-
     context.fillStyle = 'hsl(0, 0%, 98%)'
     context.fillRect(0, 0, 1000, 1000)
 
     shapes.forEach(shape => {
       context.save()
 
+      context.globalCompositeOperation = 'multiply'
       context.globalAlpha = 0.95
       context.fillStyle = shape.colour
       context.translate(shape.x + xOffset, shape.y + yOffset)
