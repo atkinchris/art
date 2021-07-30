@@ -2,7 +2,7 @@ import { rngArrayItem, rngRangeFloor } from './utils/random.js'
 import calculateHull from './utils/hull.js'
 import calculateBezierSmoothPath from './utils/interpolation.js'
 
-const createShape = colours => {
+const createShape = () => {
   const width = rngRangeFloor(500, 700)
   const height = rngRangeFloor(45, 55)
   const numberOfPoints = rngRangeFloor(30, 60)
@@ -26,22 +26,21 @@ const createShape = colours => {
   return {
     x: rngRangeFloor(0, 300),
     y: 0,
-    colour: rngArrayItem(colours),
     path,
   }
 }
 
-const createShapes = (numberOfShapes, spacingFactor, colours) => {
+const createShapes = (numberOfShapes, spacingFactor, colourFn) => {
   const spacingMax = (800 * spacingFactor) / numberOfShapes
 
   return Array.from({ length: numberOfShapes }).reduce(out => {
-    const shape = createShape(colours)
+    const shape = createShape()
     const { y: previousY = 0 } = out[out.length - 1] || {}
 
-    out.push({
-      ...shape,
-      y: previousY + rngRangeFloor(10, spacingMax),
-    })
+    shape.y += previousY + rngRangeFloor(10, spacingMax)
+    shape.colour = colourFn(shape)
+
+    out.push(shape)
 
     return out
   }, [])
@@ -55,8 +54,13 @@ const sketch = () => {
   // const brightColours = Array.from({ length: 4 }, (_, index) => `hsla(${Math.floor(360 / 6) * index},100%,50%,0.5)`)
 
   const shapes = [
-    ...createShapes(numberOfShapes / 3, spacingFactor, dullColours),
-    ...createShapes(numberOfShapes, spacingFactor, brightColours),
+    ...createShapes(numberOfShapes / 3, spacingFactor, () => rngArrayItem(dullColours)),
+    ...createShapes(numberOfShapes, spacingFactor, ({ y }) => {
+      const positionalIndex = Math.round((y / 1000) * brightColours.length)
+      const index = rngRangeFloor(0, 100) > 95 ? rngRangeFloor(0, brightColours.length) : positionalIndex
+
+      return brightColours[index]
+    }),
   ]
 
   const heightOfShapes = Math.max(...shapes.map(shape => shape.y)) - Math.min(...shapes.map(shape => shape.y))
