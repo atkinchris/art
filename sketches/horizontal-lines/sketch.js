@@ -1,17 +1,18 @@
-import { rngArrayItem, rngRangeFloor } from '../../lib/utils/random.js'
+import { rngArrayItem, rngGaussian, rngRangeFloor } from '../../lib/utils/random.js'
 import calculateHull from '../../lib/utils/hull.js'
 import calculateBezierSmoothPath from '../../lib/utils/interpolation.js'
+import { mean } from '../../lib/utils/average.js'
 
 const createShape = () => {
-  const width = rngRangeFloor(650, 750)
-  const height = rngRangeFloor(55, 65)
+  const width = rngGaussian(700, 250)
+  const height = rngGaussian(60, 15)
   const numberOfPoints = rngRangeFloor(30, 60)
 
   const path = new Path2D()
   const hull = calculateHull(
     Array.from({ length: numberOfPoints }, () => ({
       x: rngRangeFloor(-width / 2, width / 2),
-      y: rngRangeFloor(-height / 2, height / 2),
+      y: rngRangeFloor(-height / 2, height / 2) + rngGaussian(0, 75),
     }))
   )
 
@@ -24,33 +25,30 @@ const createShape = () => {
   path.closePath()
 
   return {
-    x: rngRangeFloor(0, 175),
-    y: 0,
+    x: rngGaussian(0, 200),
+    y: rngGaussian(0, 10),
+    rotation: rngGaussian(0, 5),
     path,
   }
 }
 
 const createShapes = (numberOfShapes, spacingFactor, colourFn) => {
-  const spacingMax = (1000 * spacingFactor) / numberOfShapes
+  const spacingMax = (650 * spacingFactor) / numberOfShapes
 
-  return Array.from({ length: numberOfShapes }).reduce(out => {
+  return Array.from({ length: numberOfShapes }).map((_, index) => {
     const shape = createShape()
-    const { y: previousY = -spacingMax / 2 } = out[out.length - 1] || {}
 
-    shape.rotation = rngRangeFloor(-5, 5)
-    shape.y += previousY + rngRangeFloor(10, spacingMax)
+    shape.y += spacingMax * index
     shape.colour = colourFn(shape)
 
-    out.push(shape)
-
-    return out
+    return shape
   }, [])
 }
 
 const sketch = (/** @type {CanvasRenderingContext2D} */ context) => {
   const spacingFactor = 1.3
-  const numberOfShapes = rngRangeFloor(20, 30)
-  const dullColours = Array.from({ length: 4 }, () => `hsla(${rngRangeFloor(0, 180)},10%,90%,0.5)`)
+  const numberOfShapes = rngGaussian(15, 5)
+  const dullColours = Array.from({ length: 4 }, () => `hsla(${rngRangeFloor(0, 180)},10%,90%,0.8)`)
 
   const numberOfColours = 8
   const startingColour = rngRangeFloor(0, 360)
@@ -69,9 +67,9 @@ const sketch = (/** @type {CanvasRenderingContext2D} */ context) => {
     }),
   ]
 
-  const heightOfShapes = Math.max(...shapes.map(shape => shape.y)) - Math.min(...shapes.map(shape => shape.y))
-  const widthOfShapes = Math.max(...shapes.map(shape => shape.x)) - Math.min(...shapes.map(shape => shape.x))
-  const yOffset = (1000 - heightOfShapes) / 2
+  const heightOfShapes = mean(shapes.map(shape => shape.y))
+  const widthOfShapes = mean(shapes.map(shape => shape.x))
+  const yOffset = (1000 - heightOfShapes) / 2 - 200
   const xOffset = (1000 - widthOfShapes) / 2
 
   context.fillStyle = 'hsl(0, 0%, 98%)'
