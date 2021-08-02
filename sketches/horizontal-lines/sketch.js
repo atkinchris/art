@@ -47,7 +47,7 @@ const createShapes = (numberOfShapes, spacingFactor, colourFn) => {
   }, [])
 }
 
-const sketch = () => {
+const sketch = (/** @type {CanvasRenderingContext2D} */ context) => {
   const spacingFactor = 1.3
   const numberOfShapes = rngRangeFloor(20, 30)
   const dullColours = Array.from({ length: 4 }, () => `hsla(${rngRangeFloor(0, 180)},10%,90%,0.5)`)
@@ -74,25 +74,21 @@ const sketch = () => {
   const yOffset = (1000 - heightOfShapes) / 2
   const xOffset = (1000 - widthOfShapes) / 2
 
-  return (/** @type {CanvasRenderingContext2D} */ context) => {
-    context.fillStyle = 'hsl(0, 0%, 98%)'
-    context.fillRect(0, 0, 1000, 1000)
+  context.fillStyle = 'hsl(0, 0%, 98%)'
+  context.fillRect(0, 0, 1000, 1000)
 
-    shapes.forEach(shape => {
-      context.save()
+  shapes.forEach(shape => {
+    context.save()
 
-      context.globalCompositeOperation = 'multiply'
-      context.globalAlpha = 0.95
-      context.fillStyle = shape.colour
-      context.translate(shape.x + xOffset, shape.y + yOffset)
-      context.rotate((shape.rotation * Math.PI) / 180)
-      context.fill(shape.path)
+    context.globalCompositeOperation = 'multiply'
+    context.globalAlpha = 0.95
+    context.fillStyle = shape.colour
+    context.translate(shape.x + xOffset, shape.y + yOffset)
+    context.rotate((shape.rotation * Math.PI) / 180)
+    context.fill(shape.path)
 
-      context.restore()
-    })
-  }
+    context.restore()
+  })
 }
-
-window.sketch = sketch
 
 export default sketch
