@@ -1,6 +1,6 @@
-import { rngArrayItem, rngRangeFloor } from './utils/random.js'
-import calculateHull from './utils/hull.js'
-import calculateBezierSmoothPath from './utils/interpolation.js'
+import { rngArrayItem, rngRangeFloor } from '../../lib/utils/random.js'
+import calculateHull from '../../lib/utils/hull.js'
+import calculateBezierSmoothPath from '../../lib/utils/interpolation.js'
 
 const createShape = () => {
   const width = rngRangeFloor(650, 750)
@@ -92,5 +92,7 @@ const sketch = () => {
     })
   }
 }
+
+window.sketch = sketch
 
 export default sketch
