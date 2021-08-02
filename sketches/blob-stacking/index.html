@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blob Stacking - Art - Chris Atkin</title>
+  <link rel="stylesheet" href="../../assets/styles.css">
+</head>
+
+<body>
+  <script>
+    // window.tokenData = '0xDEADBEEF'
+  </script>
+
+  <div id="wrapper">
+    <img id="sketch-image"></img>
+    <div id="controls">
+      <p>Blob Stacking</p>
+      <p id="hash"></p>
+      <button id="download">Download</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import sketch from './sketch.js'
+    import setupSketch from '../../lib/setup.js'
+
+    setupSketch(sketch)
+  </script>
+</body>
+
+</html>
